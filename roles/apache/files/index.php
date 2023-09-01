@@ -4,7 +4,7 @@
 
     $host = "localhost";
 
-    $username = "root";
+    $username = "ansibleuser";
 
     $password = "root";
 
@@ -26,7 +26,7 @@
 
     // Retrieve the list of users from the database
 
-    $sql = "SELECT id, name, email FROM users";
+    $sql = "SELECT id, username, email FROM users";
 
     $result = mysqli_query($conn, $sql);
 
@@ -46,7 +46,7 @@
 
         echo "<td>" . $row["id"] . "</td>";
 
-        echo "<td>" . $row["name"] . "</td>";
+        echo "<td>" . $row["username"] . "</td>";
 
         echo "<td>" . $row["email"] . "</td>";
 

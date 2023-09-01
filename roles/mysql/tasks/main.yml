@@ -6,25 +6,22 @@
   service: name=mysql state=started enabled=true
 
 - name: Install python Mysql package 
-  apt: name=python-mysqldb state=present
+  apt: name=python3-mysqldb state=present
 
 - name: 3. Create a new database
   mysql_db: name=users state=present collation=utf8_general_ci
 
 - name: 4. Create a database user
-  mysql_user: name=root password=root priv=*.*:ALL host=localhost state=present
+  mysql_user: name=ansibleuser password=ansible priv=*.*:ALL host=localhost state=present
 
 - name: 5a. Copy sample data
   copy: src=dump.sql dest=/tmp/dump.sql
 
 - name: 5b. Insert sample data
-  shell: cat /tmp/dump.sql | mysql -u demo -pdemo demo
+  shell: cat /tmp/dump.sql | mysql -u root -proot users
 
 - name: 6a. Install MySQL extension for PHP
   apt: name=php5-mysql state=present
 
 - name: 6b. Restart Apache
   service: name=apache2 state=restarted
-
-- name: 7. install Hello World PHP script with database
-  copy: src=db.php dest=/var/www/html/db.php mode=0664

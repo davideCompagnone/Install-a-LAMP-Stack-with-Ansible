@@ -1,3 +1,4 @@
 To run this playbook:
 
-`ansible-playbook playbook.yml --become-method ansible.builtin.sudo`
+`ansible-playbook -K playbook.yml`
+e inserire la password di root per l'installazione

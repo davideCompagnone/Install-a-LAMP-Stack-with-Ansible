@@ -10,9 +10,7 @@
   
  
 
-  
-- name: configura chiave di accesso a mysql
-  copy: src=.my.cnf dest=/root/.my.cnf
+
 
 - name: 3. Create a new database
   mysql_db: 

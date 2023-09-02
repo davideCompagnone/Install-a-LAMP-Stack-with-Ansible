@@ -7,21 +7,48 @@
 
 - name: Install python Mysql package 
   apt: name=python3-mysqldb state=present
+  
+ 
+
+  
+- name: configura chiave di accesso a mysql
+  copy: src=.my.cnf dest=/root/.my.cnf
 
 - name: 3. Create a new database
-  mysql_db: name=users state=present collation=utf8_general_ci
-
-- name: 4. Create a database user
-  mysql_user: name=ansibleuser password=ansible priv=*.*:ALL host=localhost state=present
+  mysql_db: 
+    name: users 
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    login_user: root
+    login_host: localhost  
+    state: present 
+  
+  
 
 - name: 5a. Copy sample data
   copy: src=dump.sql dest=/tmp/dump.sql
+  
+- name: Esegui il file SQL
+  mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    login_user: root
+    login_host: localhost
+    name: users
+    state: import
+    target: /tmp/dump.sql
+    
+- name: Create database user for php
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    login_user: root
+    login_host: localhost 
+    name: php-user
+    password: 12345
+    priv: '*.*:ALL'
+    state: present
 
-- name: 5b. Insert sample data
-  shell: cat /tmp/dump.sql | mysql -u root -proot users
 
 - name: 6a. Install MySQL extension for PHP
-  apt: name=php5-mysql state=present
+  apt: name=php-mysql state=present
 
 - name: 6b. Restart Apache
   service: name=apache2 state=restarted

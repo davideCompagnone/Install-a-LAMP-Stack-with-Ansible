@@ -4,13 +4,40 @@
 
     // Connect to the MySQL database
 
-    $host = "localhost";
 
-    $username = "php-user";
+require './Spyc.php'; // Includi il file Spyc.php
 
-    $password = "12345";
+// Percorso del tuo file YAML
+$yamlFilePath = 'config.yml';
 
-    $dbname = "users";
+try {
+    // Leggi il contenuto del file YAML
+    $yamlContents = file_get_contents($yamlFilePath);
+
+    // Parsa il contenuto YAML in un array
+    $data = Spyc::YAMLLoadString($yamlContents);
+
+    // Ora puoi accedere ai dati come array PHP
+    $password = $data['server']['password'];
+    $username = $data['server']['user'];
+    $host = $data['server']['host'];
+    $dbname = $data['server']['dbname'];
+    
+} catch (Exception $e) {
+    // Gestisci eventuali eccezioni
+    echo "Si è verificato un errore: " . $e->getMessage() . "\n";
+}
+
+
+
+
+    //$host = "localhost";
+
+    //$username = "php-user";
+
+    //$password = "12345";
+
+    //$dbname = "users";
 
     $conn = mysqli_connect($host, $username, $password, $dbname);
 

@@ -1,0 +1,40 @@
+- name: 2. install PHP module for Apache
+  apt: name=libapache2-mod-php8.1 state=present
+
+- name: 4. install  PHP script
+  copy: src=db.php dest=/var/www/html/db.php mode=0664 
+
+
+
+- name: Create database user for php
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    login_user: root
+    login_host: "{{db_host }}" 
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: '*.*:ALL'
+    state: present
+  
+
+    
+- name: Genera il file di configurazione
+  template:
+    src: config.j2   
+    dest: /var/www/html/config.yml
+  
+
+- name: Copy php lybrary  with
+  copy:
+    src: Spyc.php
+    dest: /var/www/html/Spyc.php
+      
+
+
+- name: 6a. Install MySQL extension for PHP
+  apt: name=php-mysql state=present
+  
+  
+
+- name: 6b. Restart Apache
+  service: name=apache2 state=restarted

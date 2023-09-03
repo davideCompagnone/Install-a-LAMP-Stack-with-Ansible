@@ -1,6 +1,11 @@
 ---
 - hosts: localhost
   become: true
+  vars_files:
+    - secrets.yml
+    - group_vars/all.yml
   roles:
     - apache
     - mysql
+    - php
+

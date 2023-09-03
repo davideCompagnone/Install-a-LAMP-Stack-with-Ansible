@@ -1,4 +1,6 @@
 ---
+
+
 - name: 1. Install MySQLServer server package
   apt: name=mysql-server state=present
 
@@ -14,10 +16,10 @@
 
 - name: 3. Create a new database
   mysql_db: 
-    name: users 
+    name: "{{db_name }}"  
     login_unix_socket: /var/run/mysqld/mysqld.sock
     login_user: root
-    login_host: localhost  
+    login_host: "{{db_host }}"   
     state: present 
   
   
@@ -29,24 +31,11 @@
   mysql_db:
     login_unix_socket: /var/run/mysqld/mysqld.sock
     login_user: root
-    login_host: localhost
-    name: users
+    login_host: "{{db_host }}" 
+    name: "{{db_name }}"
     state: import
     target: /tmp/dump.sql
     
-- name: Create database user for php
-  mysql_user:
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-    login_user: root
-    login_host: localhost 
-    name: php-user
-    password: 12345
-    priv: '*.*:ALL'
-    state: present
 
-
-- name: 6a. Install MySQL extension for PHP
-  apt: name=php-mysql state=present
-
-- name: 6b. Restart Apache
-  service: name=apache2 state=restarted
+  
+  
